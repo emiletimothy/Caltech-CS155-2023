@@ -66,36 +66,37 @@ Answer each of the following problems with 1-2 short sentences.
   What is a hypothesis set?
 \end{problem}
 \begin{solution}
-  
+A hypothesis set is a collection of functions that classify a given input set $\mathcal{X}$ to output set $\mathcal{Y}$.
 \end{solution}
 
 \begin{problem}[2]
   What is the hypothesis set of a linear model?
 \end{problem}
 \begin{solution}
-  
+  The perceptron. In other words, a line that classifies vectors in $\mathcal{X}$ depending on which side of the line the vector is on.
 \end{solution}
 
 \begin{problem}[2]
   What is overfitting?
 \end{problem}
 \begin{solution}
-  
+  Overfitting occurs when, during training, a hypothesis is chosen that increases the in-sample error but decreases the out-of-sample error. Intuitively, this happens when characteristics of the specific data set (which really shouldn't be learned) are incorporated into the hypothesis. This can cause significant error when evaluating out-of-sample data.
 \end{solution}
 
 \begin{problem}[2]
   What are two ways to prevent overfitting?
 \end{problem}
 \begin{solution}
-  
+  We can perform training validation. In other words, we choose a subset of $\mathcal{X}$ to be our validation set ($\mathcal{X}_V$), while the disjoint of $\mathcal{X}_V$ is our training set, $\mathcal{X}_T$. We then train on $\mathcal{X_T}$ and stop when the accuracy of predicting $\mathcal{X}_V$ decreases. \textbf{More data/less complex model?}
 \end{solution}
 
 \begin{problem}[2]
   What are training data and test data, and how are they used differently? Why should you never change your model based on information from test data?
 \end{problem}
 \begin{solution}
-  
+  Training data is used to select the 'best' hypothesis we can find. Test data is used to evaluate that hypothesis (namely, to see how good it is at predicting the test data). We don't want to change our model based on the test data because that could potentially lead to overfitting. Furthermore, test data can be skewed, which would cause the model to perform worse overall on other test data.
 \end{solution}
+\newpage
 
 \begin{problem}[2]
   What are the two assumptions we make about how our dataset is sampled?
