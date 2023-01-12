@@ -94,7 +94,7 @@ A hypothesis set is a collection of functions that classify a given input set $\
   What are training data and test data, and how are they used differently? Why should you never change your model based on information from test data?
 \end{problem}
 \begin{solution}
-  Training data is used to select the 'best' hypothesis we can find. Test data is used to evaluate that hypothesis (namely, to see how good it is at predicting the test data). We don't want to change our model based on the test data because that could potentially lead to overfitting. Furthermore, test data can be skewed, which would cause the model to perform worse overall on other test data.
+  Training data is used to select the 'best' hypothesis we can find. Test data is used to evaluate that hypothesis (namely, to see how good it is at predicting the test data). We don't want to change our model based on the test data because that could potentially lead to overfitting. Furthermore, test data can be skewed, which would cause the model to perform worse overall on other test data. In other words \textbf{we do not expect to find the entire distribution} in the test data.
 \end{solution}
 \newpage
 
@@ -102,21 +102,21 @@ A hypothesis set is a collection of functions that classify a given input set $\
   What are the two assumptions we make about how our dataset is sampled?
 \end{problem}
 \begin{solution}
-  
+    We note that there will always be noise and that the entire distribution will likely not be described by the dataset.
 \end{solution}
 
 \begin{problem}[2]
   Consider the machine learning problem of deciding whether or not an email is spam. What could $X$, the input space, be? What could $Y$, the output space, be?
 \end{problem}
 \begin{solution}
-  
+  $X$ could be the some feature input set that descibes a given email. For example, we could sample from a given language "Bag of Words" that describes certain words in the email. We can then label $Y$ as the output set, or whether an email is spam or not. 
 \end{solution}
 
 \begin{problem}[2]
   What is the $k$-fold cross-validation procedure?
 \end{problem}
 \begin{solution}
-  
+  This problem relates to grouping $n$ vectors into $k$ groups, where $n >> k$. This is commonly used in regression problems or radial basis functions.
 \end{solution}
 
 
@@ -144,7 +144,12 @@ A hypothesis set is a collection of functions that classify a given input set $\
 \end{problem}
 
 \begin{solution}
-  
+$$
+\E_x[\Bias(x) + \Var(x)]
+$$$$
+= \E_x\left[(F(x) - y(x))^2 +  \E_S\left[(f_S(x)-F(x))^2\right]\right]
+$$
+See that $\E_S$ simply finds the expected value over
 \end{solution}
 
 In the following problems you will explore the bias-variance tradeoff by producing learning curves for polynomial regression models.
