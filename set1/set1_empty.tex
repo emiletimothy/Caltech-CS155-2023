@@ -10,7 +10,7 @@
       Machine Learning \& Data Mining \hfill
       Caltech CS/CNS/EE 155 \hfill \\[1pt]
       Set 1\hfill
-      January $6^{th}$, 2023 \\
+      January $6^{th}$, 2023 (LATE: 4 hours) \\
     }
   }
 }
@@ -66,14 +66,17 @@ Answer each of the following problems with 1-2 short sentences.
   What is a hypothesis set?
 \end{problem}
 \begin{solution}
-A hypothesis set is a collection of functions that classify a given input set $\mathcal{X}$ to output set $\mathcal{Y}$.
+A hypothesis set is a collection of functions, that are built off a certain model, that classify a given input set $\mathcal{X}$ to output set $\mathcal{Y}$.
 \end{solution}
 
 \begin{problem}[2]
   What is the hypothesis set of a linear model?
 \end{problem}
 \begin{solution}
-  The perceptron. In other words, a line that classifies vectors in $\mathcal{X}$ depending on which side of the line the vector is on.
+  The perceptron. In other words, a line that classifies vectors in $\mathcal{X}$ depending on which side of the line the vector is on. It is also described by the following:
+  $$
+  w^Tx+b
+  $$
 \end{solution}
 
 \begin{problem}[2]
@@ -87,36 +90,37 @@ A hypothesis set is a collection of functions that classify a given input set $\
   What are two ways to prevent overfitting?
 \end{problem}
 \begin{solution}
-  We can perform training validation. In other words, we choose a subset of $\mathcal{X}$ to be our validation set ($\mathcal{X}_V$), while the disjoint of $\mathcal{X}_V$ is our training set, $\mathcal{X}_T$. We then train on $\mathcal{X_T}$ and stop when the accuracy of predicting $\mathcal{X}_V$ decreases. \textbf{More data/less complex model?}
+  We can perform training validation. In other words, we choose a subset of $\mathcal{X}$ to be our validation set ($\mathcal{X}_V$), while the disjoint of $\mathcal{X}_V$ is our training set, $\mathcal{X}_T$. We then train on $\mathcal{X_T}$ and stop when the accuracy of predicting $\mathcal{X}_V$ decreases. We can also reduce overfitting using a less complex model (i.e. regularization). Furthermore, we can also increasing the amount of training data.
 \end{solution}
-
+\newpage
 \begin{problem}[2]
   What are training data and test data, and how are they used differently? Why should you never change your model based on information from test data?
 \end{problem}
 \begin{solution}
   Training data is used to select the 'best' hypothesis we can find. Test data is used to evaluate that hypothesis (namely, to see how good it is at predicting the test data). We don't want to change our model based on the test data because that could potentially lead to overfitting. Furthermore, test data can be skewed, which would cause the model to perform worse overall on other test data. In other words \textbf{we do not expect to find the entire distribution} in the test data.
 \end{solution}
-\newpage
 
 \begin{problem}[2]
   What are the two assumptions we make about how our dataset is sampled?
 \end{problem}
 \begin{solution}
-    We note that there will always be noise and that the entire distribution will likely not be described by the dataset.
+    We note that there will likely always be noise and that the entire distribution will likely not be described by the dataset. Furthermore, the dataset is sampled identically and independently from the population.
 \end{solution}
 
 \begin{problem}[2]
   Consider the machine learning problem of deciding whether or not an email is spam. What could $X$, the input space, be? What could $Y$, the output space, be?
 \end{problem}
 \begin{solution}
-  $X$ could be the some feature input set that descibes a given email. For example, we could sample from a given language "Bag of Words" that describes certain words in the email. We can then label $Y$ as the output set, or whether an email is spam or not. 
+  $X$ could be the some feature input set that descibes a given email. For example, we could sample from a given language "Bag of Words" that describes certain words in the email. We can then label $Y$ as the output set, or whether an email is spam or not (or $1$ and $-1$ respectively). 
 \end{solution}
 
 \begin{problem}[2]
   What is the $k$-fold cross-validation procedure?
 \end{problem}
 \begin{solution}
-  This problem relates to grouping $n$ vectors into $k$ groups, where $n >> k$. This is commonly used in regression problems or radial basis functions.
+  This problem relates to grouping $n$ vectors into $k$ groups, where $n >> k$. These groups are then used to train $k-1$ models, while the remaining model is used as an "out-of-sample" testing set to validate the data. This is commonly used in regression problems or radial basis functions.
+
+
 \end{solution}
 
 
@@ -144,12 +148,29 @@ A hypothesis set is a collection of functions that classify a given input set $\
 \end{problem}
 
 \begin{solution}
+% $$
+% \E_x[\Bias(x) + \Var(x)]
+% $$$$
+% = \E_x\left[(F(x) - y(x))^2 +  \E_S\left[(f_S(x)-F(x))^2\right]\right]
+% $$
+% See that $\E_S$ simply finds the expected value over
 $$
-\E_x[\Bias(x) + \Var(x)]
+\E_S \left[E_\text{out}\left(f_S\right)\right]
 $$$$
-= \E_x\left[(F(x) - y(x))^2 +  \E_S\left[(f_S(x)-F(x))^2\right]\right]
+= \E_S \left[  \E_x\left[\left(f_S(x) - y(x)\right)^2\right] \right]
+$$$$
+= \E_x \left[ \E_S\left[\left(f_S(x) - y(x)\right)^2\right] \right]
+$$$$
+= \E_x \left[ \E_S\left[f_S(x)^2 - 2f_S(x)y(x) + y(x)^2\right] \right]
+$$$$
+= \E_x \left[F(x)^2 -2F(x)y(x) + y(x)^2 \right]
+$$$$
+= \E_x \left[(F(x) - y(x))^2 \right]
+$$$$
+= \E_x \left[\Bias(x) + \E_S\left[(f_S(x)-F(x))^2\right] \right]
+$$$$
+= \E_x[\Bias(x) + \Var(x)]
 $$
-See that $\E_S$ simply finds the expected value over
 \end{solution}
 
 In the following problems you will explore the bias-variance tradeoff by producing learning curves for polynomial regression models.
@@ -179,41 +200,45 @@ The dataset \texttt{bv_data.csv} is provided and has a header denoting which col
 
 \end{problem}
 \begin{solution}
+\href{https://colab.research.google.com/drive/1vB_mlWWWBEmudPGr49NszSYmXRUAdfZg?usp=sharing}{CODE HERE} \\
+\begin{center}
+    \includegraphics[width=8cm]{set1/images/output.png}
+\end{center}
   \end{solution}
 
 \begin{problem}[3]
   Based on the learning curves, which polynomial regression model (i.e. which degree polynomial) has the highest bias? How can you tell?
 \end{problem}
 \begin{solution}
-
+Degree 1 has the highest bias since the training error is the largest (and plateaus) and also because it is the simplest model.
 \end{solution}
 
 \begin{problem}[3]
   Which model has the highest variance? How can you tell?
 \end{problem}
 \begin{solution}
-  
+  The model with the highest variance is degree 12. We know this because the out of sample error is quite high and because the model is very complex.
 \end{solution}
 
 \begin{problem}[3]
   What does the learning curve of the quadratic model tell you about how much the model will improve if we had additional training points?
 \end{problem}
 \begin{solution}
-
+We note that as we add more points, the in sample and out of sample error both plateau. Thus, performance will improve only marginally with additional points.
 \end{solution}
 
 \begin{problem}[3]
   Why is training error generally lower than validation error?
 \end{problem}
 \begin{solution}
-  
+  This is because the model is fitted to the training data. In contrast, it has never 'seen' the validation data. Thus, validation error is higher as it is out-of-sample.
 \end{solution}
 
 \begin{problem}[3]
   Based on the learning curves, which model would you expect to perform best on some unseen data drawn from the same distribution as the training data, and why?
 \end{problem}
 \begin{solution}
-  
+  Likely degree 6 since it has the lowest validation error, which is equivalent to "unseen" data.
 \end{solution}
 
 
@@ -237,9 +262,17 @@ Stochastic gradient descent (SGD) is an important optimization method in machine
   
 \end{hint}
 \begin{solution}
-
+Assume, to the contrary that $\nabla f(x') \neq 0$. Allow $h = \varepsilon \nabla f(x'), \varepsilon > 0$. Then by the first order Taylor series we have
+$$
+f(x' - \varepsilon \nabla f(x')) = f(x') - \varepsilon \nabla f(x' - c \varepsilon \nabla f(x'))^T\nabla f(x')
+$$
+since $\nabla f$ is continuous and from Taylors theorem, we can also write that
+$$
+\nabla f(x' - c \varepsilon \nabla f(x'))^T \geq \frac{1}{2} || \nabla f(x') ||
+$$
+which means that $\nabla f(x' - c \varepsilon \nabla f(x'))^T$ is \textbf{not} negatively valued. Notice that if $\nabla f(x')$ were positive (nonzero), then we would have some $x''$ with$f(x'') < f(x')$, which is impossible. Thus (contradiction) we can only write that $\nabla f(x') = 0$.
 \end{solution}
-
+\newpage
 Linear regression learns a model of the form:
 \begin{align*}
   f(x_1, x_2, \cdots, x_d) = \left(\sum_{i=1}^d w_i x_i\right) + b
@@ -252,7 +285,11 @@ Linear regression learns a model of the form:
   Include an additional element in $\mathbf{w}$ and $\mathbf{x}$.
 \end{hint}
 \begin{solution}
-  
+  We can simply concatenate an extra 1 to the beginning of $\textbf{x}$. This will cause our weight vector $\textbf{w}$ to be of dimension $N + 1$, where $N = \dim(x)$. In other words, we will have that
+  $$
+  w_0 \cdot 1 + \sum_{i=1}^N w_i \cdot x_i
+  $$
+  where $\textbf{w} = \langle w_0, w_1, ..., w_N \rangle$ and symmetrically for $\textbf{x}$.
 \end{solution}
 
 Linear regression learns a model by minimizing the squared loss function $L$, which is the sum across all training data $\{(\mathbf{x}_1, y_1),\cdots,(\mathbf{x}_N, y_N)\}$ of the squared difference between actual and predicted output values:
@@ -262,7 +299,17 @@ Linear regression learns a model by minimizing the squared loss function $L$, wh
   Both GD and SGD uses the gradient of the loss function to make incremental adjustments to the weight vector $\mathbf{w}$. Derive the gradient of the squared loss function with respect to $\mathbf{w}$ for linear regression. Explain the difference in computational complexity in 1 update of the weight vector between GD and SGD. 
 \end{problem}
 \begin{solution}
-  
+  $$
+  \partial_w L(w,b) = \partial \sum_{i = 1}^N L(y_i,f(x | w,b)
+  $$$$
+  = \sum_{i = 1}^N \partial_w L(y_i, f(x_i | w, b))
+  $$$$
+  = \sum -2(y_i - f(x_i | w, b))\partial_w f(x_i | w,b))
+  $$$$
+  = \sum_{i=1}^N -2(y_i - (w^Tx - b))x_i
+  $$
+
+  Gradient descent requires iterating through the entire dataset, which is O(N) time complexity. By contrast, since we assume, in expectation, batches will perform the same over multiple epochs, we may use stochastic gradient descent. Here randomly chosen batches (which are subsets of the full dataset) are chosen. This is technically still linear time, but with a sufficient number of batches SGD is much faster (due to a smaller number of points to iterate over per update).
 \end{solution}
 
 The following few problems ask you to work with the first of two provided Jupyter notebooks for this problem, \texttt{3_notebook_part1.ipynb}, which includes tools for gradient descent visualization. This notebook utilizes the files \texttt{sgd_helper.py} and \texttt{multiopt.mp4}, but you should not need to modify either of these files. 
@@ -280,14 +327,14 @@ For your implementation of problems D-F, \textbf{do not} consider the bias term.
   \end{itemize}
 \end{problem}
 \begin{solution}
-See code. %This does not need to be changed.
+\href{https://colab.research.google.com/drive/1GFc23TqByol_4OWS_tyVTa3n8eoYXFvn?usp=sharing}{CODE HERE}
 \end{solution}
 
 \begin{problem}[2]
   Run the visualization code in the notebook corresponding to problem D. How does the convergence behavior of SGD change as the starting point varies? How does this differ between datasets 1 and 2? Please answer in 2-3 sentences.
 \end{problem}
 \begin{solution}
-
+As we change the starting point, SGD takes longer to converge for points further away from the minimum. However, between datasets 1 and 2 there isn't a large difference in convergence time.
 \end{solution}
 
 \begin{problem}[6]
@@ -295,7 +342,11 @@ See code. %This does not need to be changed.
 \end{problem}
 
 \begin{solution}
+It takes longer to converge for smaller $\eta$. The largest $\eta$ are the ones on top (on the right of the graph) and they go down to the smallest $\eta$. (Could not figure out how to get legend).
 
+\begin{center}
+    \includegraphics[width=10cm]{set1/images/eta1.png}
+\end{center}
 \end{solution}
 
 
@@ -316,13 +367,21 @@ For your implementation of problems G-I, \textbf{do} consider the bias term usin
   %$\epsilon$ here is a measure of how much change in error there is compared to the initial error in the epoch. Calculate the change in error every epoch and compare it to the change in error from the first epoch. If new change/initial change is less than $\epsilon$, stop the training. $\eta$ is the factor by which you multiply the gradient in each step of the descent, and $\mathbf{w}$ is the initial weight vector.
 \end{problem}
 \begin{solution}
+\href{https://colab.research.google.com/drive/1tpWQzEpdqmPHiF7JQ3pcArDQjDq3R2UX?usp=sharing}{CODE HERE}
+ $$w = -5.94211251, 3.94389978, -11.7238423, 8.78567496
+ $$$$ 
+ b = -0.22718924
+ $$
 \end{solution}
 
 \begin{problem}[2]
   Perform SGD as in the previous problem for each learning rate $\eta$ in \[\{e^{-10}, e^{-11}, e^{-12}, e^{-13}, e^{-14}, e^{-15}\},\] and calculate the training error at the beginning of each epoch during training.  On a single plot, show training error vs. number of epochs trained for each of these values of $\eta$. Explain what is happening.
 \end{problem}
 \begin{solution}
-  
+  It takes longer to converge for smaller $\eta$.
+  \begin{center}
+    \includegraphics[width=10cm]{set1/images/eta2.png}
+\end{center}
 \end{solution}
 
 
@@ -330,7 +389,17 @@ For your implementation of problems G-I, \textbf{do} consider the bias term usin
   The closed form solution for linear regression with least squares is \[\mathbf{w} = \left(\sum_{i=1}^N \mathbf{x_i}\mathbf{x_i}^T\right)^{-1}\left(\sum_{i=1}^N \mathbf{x_i}y_i\right).\]  Compute this analytical solution.  Does the result match up with what you got from SGD?
 \end{problem}
 \begin{solution}
- 
+ Yes, for the SGD we have that 
+ $$w = -5.94211251, 3.94389978, -11.7238423, 8.78567496
+ $$$$ 
+ b = -0.22718924
+ $$
+ And for closed form we have
+ $$w = -5.99157048, 4.01509955, -11.93325972, 8.99061096
+ $$$$ 
+ b = -0.31644251
+ $$
+ Which is pretty close.
 \end{solution}
 
 Answer the remaining questions in 1-2 short sentences.
@@ -339,14 +408,14 @@ Answer the remaining questions in 1-2 short sentences.
   Is there any reason to use SGD when a closed form solution exists?
 \end{problem}
 \begin{solution}
-  
+  Since SGD works on subsets of data (whereas the closed form solution uses the entire dataset), SGD can be computationally faster.
 \end{solution}
 
 \begin{problem}[2]
   Based on the SGD convergence plots that you generated earlier, describe a stopping condition that is more sophisticated than a pre-defined number of epochs.
 \end{problem}
 \begin{solution}
-  
+  We may observe the euclidean distance between iterative weight vectors and stop when it reaches a certain lower threshold.
 \end{solution}
 
 
@@ -412,7 +481,17 @@ The following few problems ask you to work with the provided Jupyter notebook fo
   
 \end{problem}
 \begin{solution}
-
+\href{https://colab.research.google.com/drive/1Gq4s0ZueixyhST93Yo0EFipu_uvUbHx9?usp=sharing}{CODE HERE}
+\\
+\texttt{
+0.0 0.0 1.0 1 \\
+1.0 1.0 -1.0 1 \\
+2.0 1.0 2.0 1 \\
+3.0 2.0 0.0 \\
+}
+\begin{center}
+    \includegraphics[width=7cm]{set1/images/p.png}
+\end{center}
 
 \end{solution}
 
@@ -424,19 +503,28 @@ The following few problems ask you to work with the provided Jupyter notebook fo
   Finally, how does this generalize to N-dimension? More precisely, in N-dimensional space, what is the minimum size of a dataset that is not linearly separable, such that no $N$ points are on the same hyperplane? For the $N$-dimensional case, you may state your answer without proof or justification.
 \end{problem}
 \begin{solution}
+In 2D, it is four points. Allow the points to be organized in a square with a +1, -1 pattern (going around the perimeter). It is impossible to classify those points with a single perceptron. \\
 
+Similarly, this (degenerate) case exists in 3D. However, If we ignore it, then 5 points (additional one for the extra dimension) will be non-separable by a perceptron (plane). \\
+
+For $N$-dimensions, it generalizes (the break point) to N + 2 points
 \end{solution}
 
 \begin{problem}[2]
   Run the visualization code in the Jupyter notebook section corresponding to question C (report your plots). Assume a dataset is \emph{not} linearly separable. Will the Perceptron Learning Algorithm ever converge? Why or why not?
 \end{problem}
 \begin{solution}
+    No, becuase the algorithm converges if and only if the data is linearly separable.
 
+    \begin{center}
+        \includegraphics[width=7cm]{set1/images/bruh.png}
+    \end{center}
 \end{solution}
 
 \begin{problem}[2]
 How does the convergence behavior of the weight vector differ between the perceptron and SGD algorithms? Think of comparing, at a high level, their smoothness and whether they always converge (You don't need to implement any code for this problem.)
 \end{problem}
 \begin{solution}
+SGD updates more "continuously" since we follow the gradient. In contrast, the perceptron is being "decided" by several points, resulting in more sporadic behavior. SGD will always converge as there will almost always be some "minimum" point. The perceptron, on the other hand, only converges when we have linearly separable data (almost never).
 \end{solution}
 \end{document}
