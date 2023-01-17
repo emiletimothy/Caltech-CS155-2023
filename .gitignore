@@ -1,9 +1,0 @@
-.DS_Store
-
-# pdflatex build files
-*.aux
-*.fdb_latexmk
-*.fls
-*.log
-*.out
-*.synctex.gz
